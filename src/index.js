@@ -1,5 +1,6 @@
 /*
-    React App created by following the tutorial here: https://reactjs.org/tutorial/tutorial.html
+    React App intially created by following the tutorial here: https://reactjs.org/tutorial/tutorial.html
+
     'npm start' in the project root directory to serve at localhost:3000 (default port for React Apps)
 */
 import React from "react";
@@ -146,22 +147,8 @@ class Game extends React.Component {
 
 // =============================================================================
 
-const container =  document.getElementById('root');
-const root = createRoot(container);
-root.render(
-    <Game />
-)
-
-/* Old method for rendering pre React 18, required different import as well -
-    import ReactDOM from 'react-dom' */
-// ReactDOM.render(
-//     <Game />,
-//     document.getElementById('root')
-// );
-
-// =============================================================================
-
 function calculateWinner(squares) {
+    /* Check against known winning combinations - Would like to do this programmatically with n-dimensions */ 
     const lines = [
         [0, 1, 2],
         [3, 4, 5],
@@ -180,3 +167,19 @@ function calculateWinner(squares) {
     }
     return null;
 }
+
+// =============================================================================
+
+/* New method for rendering in React 18+ */
+const container =  document.getElementById('root');
+const root = createRoot(container);
+root.render(
+    <Game />
+)
+
+/* Old method for rendering pre React 18, required different import as well -
+    import ReactDOM from 'react-dom' */
+// ReactDOM.render(
+//     <Game />,
+//     document.getElementById('root')
+// );
