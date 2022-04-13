@@ -1,3 +1,7 @@
+/*
+    React App created by following the tutorial here: https://reactjs.org/tutorial/tutorial.html
+    'npm start' in the project root directory to serve at localhost:3000 (default port for React Apps)
+*/
 import React from "react";
 import { createRoot } from 'react-dom/client';
 import './index.css';
@@ -15,8 +19,11 @@ function Square(props) {
     );
 }
 
+/* Inherited React Component - this is the recommended syntax for more complex Components that need to have their own
+    methods, states, etc... */
 class Board extends React.Component {
     renderSquare(i) {
+        /* Generate a Square element */
         return (
             <Square 
                 value={this.props.squares[i]}
@@ -26,24 +33,32 @@ class Board extends React.Component {
         );
     }
 
-    render() {
-        const boardDimension = 3;
-        let boardDisplay = [];
+    renderBoard(n) {
+        /* Generate a Board of n Dimensions */
+        const dimension = n;
+        let board = [];
 
-        for (let i = 0; i < boardDimension; i++) {
-            boardDisplay.push(<div className="board-row" key={i}>
-            {(() => {
-                    for (let j = 0; j < boardDimension; j++) {
-                        boardDisplay.push(this.renderSquare((boardDimension * i) + j))
+        for (let i = 0; i < dimension; i++) {
+            board.push(
+            <div className="board-row" key={i}>
+                {(() => {
+                        for (let j = 0; j < dimension; j++) {
+                            board.push(this.renderSquare((dimension * i) + j))
+                        }
                     }
-                }
-            )()}
+                )()}
             </div>);
         }
+        return board;
+    }
+
+    render() {
+        /* dimension comes from Game state */
+        const board = this.renderBoard(this.props.dimension);
 
         return (
             <div>
-                {boardDisplay}
+                {board}
             </div>
         );
     }
@@ -51,17 +66,22 @@ class Board extends React.Component {
 
 class Game extends React.Component {
     constructor(props) {
+        /* JS sub-classes must call super() */
         super(props);
+        /* this tracks state for the whole Game, various 'states' cascade down to child components via
+            their 'props' when they're called in JSX - can only be updated with this.setState() */
         this.state = {
             history: [{
                 squares: Array(9).fill(null),
             }],
             stepNumber: 0,
             xIsNext: true,
+            dimension: 3,
         };
     }
 
     handleClick(i) {
+        /* this handleClick() cascades all the way down to the Square component through 'props'*/
         const history = this.state.history.slice(0, this.state.stepNumber + 1);
         const current = history[history.length - 1];
         const squares = current.squares.slice();
@@ -112,6 +132,7 @@ class Game extends React.Component {
                     <Board 
                         squares={current.squares}
                         onClick={(i) => this.handleClick(i)}
+                        dimension={this.state.dimension}
                     />
                 </div>
                 <div className="game-info">
